@@ -35,10 +35,10 @@ public class VideoTest extends NativeBase {
      * @throws Exception
      */
     @Override
-    protected void setUp() throws Exception {
+    public void setUp() {
         super.setUp();
         videoPlayerIdlingResource = new VideoPlayerIdlingResource((VideoView)
-                getActivity().findViewById(R.id.native_video_player));
+                mActivityRule.getActivity().findViewById(R.id.native_video_player));
         Espresso.registerIdlingResources(videoPlayerIdlingResource);
     }
 
@@ -48,7 +48,7 @@ public class VideoTest extends NativeBase {
      * @throws Exception
      */
     @Override
-    protected void tearDown() throws Exception {
+    public void tearDown() throws Exception {
         Espresso.unregisterIdlingResources(videoPlayerIdlingResource);
         super.tearDown();
     }

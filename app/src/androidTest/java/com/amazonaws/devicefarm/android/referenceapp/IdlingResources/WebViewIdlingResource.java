@@ -31,7 +31,7 @@ public class WebViewIdlingResource extends WebChromeClient implements IdlingReso
 
     public WebViewIdlingResource(WebView webView) {
         this.webView = webView;
-        webView.setWebChromeClient(this);
+   //     this.webView.setWebChromeClient(this);
     }
 
     @Override

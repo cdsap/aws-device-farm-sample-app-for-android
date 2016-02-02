@@ -21,14 +21,11 @@ import android.support.v4.view.ViewPager;
 
 import com.amazonaws.devicefarm.android.referenceapp.IdlingResources.ViewPagerIdlingResource;
 
+import org.junit.Before;
+
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static junit.framework.Assert.fail;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.core.Is.is;
 
 /**
  * A base class for a view pager
@@ -59,10 +56,10 @@ public abstract class ViewPagerTestBase extends BaseADFTest{
      *
      * @throws Exception
      */
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() {
         super.setUp();
-        viewPagerIdlingResource = new ViewPagerIdlingResource((ViewPager)getActivity().findViewById(R.id.view_pager1));
+        viewPagerIdlingResource = new ViewPagerIdlingResource((ViewPager)mActivityRule.getActivity().findViewById(R.id.view_pager1));
         Espresso.registerIdlingResources(viewPagerIdlingResource);
         for (int i = 0; i < getPageIndex(); i++) {
             onView(withId(getPagerId())).perform(swipeLeft());
@@ -75,7 +72,7 @@ public abstract class ViewPagerTestBase extends BaseADFTest{
      * @throws Exception
      */
     @Override
-    protected void tearDown() throws Exception {
+    public void tearDown() throws Exception {
         Espresso.unregisterIdlingResources(viewPagerIdlingResource);
         super.tearDown();
     }

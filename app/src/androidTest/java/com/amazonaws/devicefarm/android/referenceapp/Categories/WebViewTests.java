@@ -16,7 +16,8 @@
 package com.amazonaws.devicefarm.android.referenceapp.Categories;
 
 import android.support.test.espresso.Espresso;
-import android.webkit.WebView;
+import android.support.test.espresso.contrib.DrawerActions;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 
 import com.amazonaws.devicefarm.android.referenceapp.BaseADFTest;
 import com.amazonaws.devicefarm.android.referenceapp.IdlingResources.WebViewIdlingResource;
@@ -27,16 +28,14 @@ import org.junit.Test;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 /**
  * Tests for a web view
  */
-public class WebViewTests extends BaseADFTest{
+public class WebViewTests extends BaseADFTest {
     private WebViewIdlingResource webViewIdlingResource;
 
     /**
@@ -45,19 +44,25 @@ public class WebViewTests extends BaseADFTest{
      * @throws Exception
      */
     @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        try {
-            runTestOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    webViewIdlingResource = new WebViewIdlingResource((WebView) getActivity().findViewById(R.id.webView_browser));
-                    Espresso.registerIdlingResources(webViewIdlingResource);
-                }
-            });
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+    public void setUp() {
+        DrawerActions.openDrawer(R.id.drawer_layout);
+        RecyclerViewActions.scrollTo(withText(getClassName()));
+        onView(withId(R.id.drawerList)).perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(getClassName())), click()));
+
+     //   Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
+     //   WebViewFragment fragment = (WebViewFragment) mActivityRule.getActivity().getSupportFragmentManager()
+
+       //         .findFragmentById(R.id.container_body);
+      //  mActivityRule.getActivity().runOnUiThread(new Runnable() {
+       ///     @Override
+        //    public void run() {
+      //          webViewIdlingResource = new WebViewIdlingResource((WebView) mActivityRule.getActivity().findViewById(R.id.webView_browser));
+       // (WebView) ((WebView) mActivityRule.getActivity().findViewById(R.id.webView_browser)).setWebChromeClient(new WebChromeClient());
+        //        Espresso.registerIdlingResources(webViewIdlingResource);
+
+        //    }
+       // });
+   //               onView(withId(R.id.webView_browser)));
     }
 
     /**
@@ -66,7 +71,7 @@ public class WebViewTests extends BaseADFTest{
      * @throws Exception
      */
     @Override
-    protected void tearDown() throws Exception {
+    public void tearDown() throws Exception {
         Espresso.unregisterIdlingResources(webViewIdlingResource);
         super.tearDown();
     }
@@ -86,7 +91,7 @@ public class WebViewTests extends BaseADFTest{
      * Tests if the error toast is displayed when a bad url is entered in the url bar
      */
     @Test
-    public void testInputInvalidUrl(){
+    public void testInputInvalidUrl() {
         final String BAD_URL = "a bad url string";
         typeInWebBar(BAD_URL);
         verifyToastMessage(R.string.web_error_toast);
@@ -95,6 +100,7 @@ public class WebViewTests extends BaseADFTest{
     /**
      * Tests to see if google is loaded when navigated to Google.com
      */
+   // @UiThreadTest
     @Test
     public void testNavigateToWebSite() {
         final String URL = "http://www.google.com/";

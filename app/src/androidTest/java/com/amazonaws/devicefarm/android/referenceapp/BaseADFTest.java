@@ -16,17 +16,19 @@
 package com.amazonaws.devicefarm.android.referenceapp;
 
 
-import android.support.test.InstrumentationRegistry;
-import android.support.test.annotation.UiThreadTest;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
-import android.test.ActivityInstrumentationTestCase2;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
 import com.amazonaws.devicefarm.android.referenceapp.Activities.MainActivity;
 import com.amazonaws.devicefarm.android.referenceapp.Util.ScreenShot;
 
-import org.junit.Ignore;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -43,16 +45,14 @@ import static org.hamcrest.Matchers.not;
 /**
  * The base Espresso class for all the Espresso tests
  */
-@Ignore
-public abstract class BaseADFTest extends ActivityInstrumentationTestCase2<MainActivity> {
+@RunWith(AndroidJUnit4.class)
+public abstract class BaseADFTest  {
 
-    public BaseADFTest() {
-        super(MainActivity.class);
-    }
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule(MainActivity.class);
 
     protected abstract String getClassName();
 
-    @UiThreadTest
     @Test
     public abstract void testSanity();
 
@@ -63,14 +63,12 @@ public abstract class BaseADFTest extends ActivityInstrumentationTestCase2<MainA
      *
      * @throws Exception instrumentation ActivityInstrumentationTestCase2 exception
      */
-    @Override
-    protected void setUp() throws Exception {
-        getActivity(); //IMPORTANT you must call this before your tests!
-        super.setUp();
+    @Before
+    public void setUp()  {
         DrawerActions.openDrawer(R.id.drawer_layout);
         RecyclerViewActions.scrollTo(withText(getClassName()));
         onView(withId(R.id.drawerList)).perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(getClassName())), click()));
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+  //      InstrumentationRegistry.getInstrumentation().waitForIdleSync();
     }
 
     /**
@@ -78,14 +76,14 @@ public abstract class BaseADFTest extends ActivityInstrumentationTestCase2<MainA
      *
      * @throws Exception
      */
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         try {
             takeScreenShot();
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-        super.tearDown();
+     //   super.tearDown();
     }
 
     /**
@@ -144,12 +142,12 @@ public abstract class BaseADFTest extends ActivityInstrumentationTestCase2<MainA
      * @throws Throwable
      */
     protected void takeScreenShot() throws Throwable {
-        runTestOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ScreenShot.take(getActivity());
-            }
-        });
+     //   mActivityRule.getActivity().runOnUiThread(new Runnable() {
+    //        @Override
+    //        public void run() {
+                ScreenShot.take(mActivityRule.getActivity());
+    //        }
+    //    });
     }
 
     /**
@@ -158,7 +156,7 @@ public abstract class BaseADFTest extends ActivityInstrumentationTestCase2<MainA
      */
     protected void verifyToastMessage(int messageId){
         onView(withText(messageId)).
-                inRoot(withDecorView(not(getActivity().getWindow().getDecorView())))
+                inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
     }
 

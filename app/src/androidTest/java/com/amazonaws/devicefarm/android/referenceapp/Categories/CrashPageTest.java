@@ -21,6 +21,8 @@ import com.amazonaws.devicefarm.android.referenceapp.BaseADFTest;
 import com.amazonaws.devicefarm.android.referenceapp.R;
 import org.junit.Test;
 
+import static org.junit.Assert.fail;
+
 /**
  * Tests for a crash page
  */
