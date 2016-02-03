@@ -15,6 +15,8 @@
 
 package com.amazonaws.devicefarm.android.referenceapp.Categories;
 
+import android.support.test.filters.RequiresDevice;
+
 import com.amazonaws.devicefarm.android.referenceapp.BaseADFTest;
 import com.amazonaws.devicefarm.android.referenceapp.R;
 
@@ -42,6 +44,7 @@ public class FixturesTest extends BaseADFTest {
     /**
      * Tests if the wifi is on
      */
+    @RequiresDevice
     @Test
     public void testWifiOn (){
         assertIdStatus(R.id.wifi, true);
@@ -50,6 +53,7 @@ public class FixturesTest extends BaseADFTest {
     /**
      * Tests if the bluetooth is on
      */
+    @RequiresDevice
     @Test
     public void testBluetoothOn() {
         assertIdStatus(R.id.bluetooth, true);
@@ -66,6 +70,7 @@ public class FixturesTest extends BaseADFTest {
     /**
      * Tests if the nfc is on. Fails on devices with no nfc support
      */
+    @RequiresDevice
     @Test
     public void testNfcOn() {
         assertIdStatus(R.id.nfc, true);

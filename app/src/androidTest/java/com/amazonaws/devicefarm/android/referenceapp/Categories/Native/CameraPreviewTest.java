@@ -15,6 +15,8 @@
 
 package com.amazonaws.devicefarm.android.referenceapp.Categories.Native;
 
+import android.support.test.filters.RequiresDevice;
+
 import com.amazonaws.devicefarm.android.referenceapp.R;
 
 import org.junit.Test;
@@ -38,6 +40,7 @@ public class CameraPreviewTest extends NativeBase {
      * indicates that it's on. Fails on devices with no camera support.
      */
     @Test
+    @RequiresDevice
     public void testCheckIfCameraOn() {
         checkIdWithContentDescription(R.id.camera_surface_view, R.string.camera_preview_on);
     }

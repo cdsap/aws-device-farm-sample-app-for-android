@@ -45,8 +45,8 @@ public class Native_MediaPlayer extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.native_mediaplayer_fragment, container, false);
         ButterKnife.inject(this, view);
-        movieUri = "android.resource://" + getActivity().getPackageName() + "/" + R.raw.movie;
-        new BackgroundVideoTask().execute(movieUri);
+    //    movieUri = "android.resource://" + getActivity().getPackageName() + "/" + R.raw.movie;
+   //     new BackgroundVideoTask().execute(movieUri);
         return view;
     }
 

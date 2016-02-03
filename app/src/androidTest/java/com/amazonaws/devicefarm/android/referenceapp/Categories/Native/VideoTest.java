@@ -16,6 +16,7 @@
 package com.amazonaws.devicefarm.android.referenceapp.Categories.Native;
 
 import android.support.test.espresso.Espresso;
+import android.support.test.filters.RequiresDevice;
 import android.widget.VideoView;
 
 import com.amazonaws.devicefarm.android.referenceapp.IdlingResources.VideoPlayerIdlingResource;
@@ -35,11 +36,14 @@ public class VideoTest extends NativeBase {
      * @throws Exception
      */
     @Override
+    @RequiresDevice
     public void setUp() {
         super.setUp();
         videoPlayerIdlingResource = new VideoPlayerIdlingResource((VideoView)
                 mActivityRule.getActivity().findViewById(R.id.native_video_player));
-        Espresso.registerIdlingResources(videoPlayerIdlingResource);
+
+        // videoPlayerIdlingResource = new VideoPlayerIdlingResource((VideoView)
+        //         mActivityRule.getActivity().findViewById(R.id.native_video_player));
     }
 
     /**
@@ -48,6 +52,7 @@ public class VideoTest extends NativeBase {
      * @throws Exception
      */
     @Override
+    @RequiresDevice
     public void tearDown() throws Exception {
         Espresso.unregisterIdlingResources(videoPlayerIdlingResource);
         super.tearDown();
@@ -59,8 +64,13 @@ public class VideoTest extends NativeBase {
     }
 
     @Override
+    @RequiresDevice
     public void testSanity() {
+        Espresso.registerIdlingResources(videoPlayerIdlingResource);
+
         checkIfIdDisplayed(R.id.native_video_player);
+        Espresso.unregisterIdlingResources(videoPlayerIdlingResource);
+
     }
 
     /**
@@ -70,7 +80,12 @@ public class VideoTest extends NativeBase {
      * @throws InterruptedException
      */
     @Test
+    @RequiresDevice
     public void testCheckVideoPlaying() throws InterruptedException {
+        Espresso.registerIdlingResources(videoPlayerIdlingResource);
+
         checkIdWithContentDescription(R.id.native_video_player, R.string.videoView_playing);
+        Espresso.unregisterIdlingResources(videoPlayerIdlingResource);
+
     }
 }
